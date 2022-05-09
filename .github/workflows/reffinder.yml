@@ -48,5 +48,5 @@ jobs:
             echo $USER_PASS | sudo -S docker ps
             echo $USER_PASS | sudo -S docker images
 
-            cd ci-cd/
+            cd reffinder/
             echo $USER_PASS | sudo -S docker-compose up -d
