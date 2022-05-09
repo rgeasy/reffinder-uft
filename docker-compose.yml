@@ -5,19 +5,15 @@ services:
     container_name: reffinder
     build:
       context: .
-      dockerfile: Dockerfile   
+      dockerfile: Dockerfile
     restart: always
     ports:
       - 8000:80
     volumes:
       - ./public:/var/www/html
-    networks: 
+    networks:
       - reffinder-network
-      - rgeasy_shared-network
 
-networks: 
+networks:
     reffinder-network:
         driver: bridge
-    rgeasy_shared-network:
-        external: true
-
