@@ -38,13 +38,15 @@ jobs:
         uses: appleboy/ssh-action@master
         env:
           USER_PASS: "${{ secrets.USER_PASS }}"
+          USER: "${{secrets.SSH_USER}}"
         with:
           host: ${{secrets.SSH_HOST}}
           username: ${{secrets.SSH_USER}}
           key: ${{secrets.SSH_PRIVATE_KEY}}
           port: ${{secrets.SSH_PORT}}
-          envs: USER_PASS
+          envs: USER_PASS, USER
           script: |
+            su ivo
             echo $USER_PASS | sudo -S docker ps
             echo $USER_PASS | sudo -S docker images
 
