@@ -1,4 +1,5 @@
 <?php
+
 ini_set('max_execution_time', '300');
 error_reporting(E_ALL || ~E_NOTICE);
 function drawPicture($data,$name, $id)
