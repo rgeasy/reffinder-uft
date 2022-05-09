@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  reffinder:
+    container_name: reffinder
+    build:
+      context: .
+      dockerfile: Dockerfile   
+    restart: always
+    ports:
+      - 8000:80
+    volumes:
+      - ./public:/var/www/html
+    networks: 
+      - reffinder-network
+      - rgeasy_shared-network
+
+networks: 
+    reffinder-network:
+        driver: bridge
+    rgeasy_shared-network:
+        external: true
+
