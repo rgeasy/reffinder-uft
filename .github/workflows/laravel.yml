@@ -1,12 +1,12 @@
-name: Reffinder CI
+name: Reffinder CI/CD
 
 on:
   push:
     branches: [ master ]
 
 jobs:
-  reffinder-tests:
-
+  reffinder-ci:
+    name: CI
     runs-on: ubuntu-latest
 
     steps:
@@ -16,3 +16,48 @@ jobs:
     - uses: actions/checkout@v3
     - name: Install Dependencies
       run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+  
+  reffinder-cd:
+    name: CD
+    needs: reffinder-ci
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v2.2.11
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          ARGS: "-rltgoDzvO --exclude .git --exclude .docker --exclude .github"
+          REMOTE_HOST: ${{secrets.SSH_HOST}}
+          REMOTE_USER: ${{secrets.SSH_USER}}
+          TARGET: /home/${{secrets.SSH_USER}}/reffinder
+
+      - name: Execute SSH commands
+        uses: appleboy/ssh-action@master
+        env:
+          USER_PASS: "${{ secrets.SSH_USER_PASS }}"
+        with:
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USER}}
+          key: ${{secrets.SSH_PRIVATE_KEY}}
+          port: ${{secrets.SSH_PORT}}
+          envs: USER_PASS
+          script: |
+            echo $USER_PASS | sudo -S docker ps
+            echo $USER_PASS | sudo -S docker images
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
